@@ -1,0 +1,41 @@
+# Render Infrastructure-as-Code Blueprint
+# Deploys Unified Full-Stack Application + Persistent Managed PostgreSQL Database (100% Free Tier)
+services:
+  - type: web
+    name: lic-insurance-portal
+    runtime: node
+    plan: free
+    region: singapore # Closest region to India / low latency
+    buildCommand: npm install && npm --prefix server install && npm --prefix client install && npm run build:prod
+    startCommand: NODE_ENV=production npm --prefix server start
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: lic-advisory-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: ADVISOR_NAME
+        value: Dnyaneshwar Yedu Bhoi
+      - key: ADVISOR_PRIMARY_PHONE
+        value: "9923835939"
+      - key: ADVISOR_SECONDARY_PHONE
+        value: "7972131176"
+      - key: ADVISOR_EMAIL
+        value: licdybhoi@gmail.com
+      - key: ADVISOR_WHATSAPP
+        value: "919923835939"
+      - key: CLIENT_ORIGIN
+        value: https://lic-insurance-portal.onrender.com
+
+databases:
+  - name: lic-advisory-db
+    plan: free
+    region: singapore
+    databaseName: lic_advisory
+    user: lic_user

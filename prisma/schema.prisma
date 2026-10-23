@@ -1,0 +1,131 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id              String         @id @default(uuid())
+  email           String         @unique
+  name            String
+  phone           String?
+  passwordHash    String
+  role            String         @default("CUSTOMER") // "CUSTOMER", "ADMIN", "ADVISOR"
+  isEmailVerified Boolean        @default(false)
+  isActive        Boolean        @default(true)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  enquiries       Enquiry[]
+  consultations   Consultation[]
+  auditLogs       AuditLog[]     @relation("UserAuditLogs")
+}
+
+model Enquiry {
+  id                String                 @id @default(uuid())
+  referenceNumber   String                 @unique
+  userId            String?
+  user              User?                  @relation(fields: [userId], references: [id], onDelete: SetNull)
+  fullName          String
+  mobileNumber      String
+  email             String
+  city              String
+  category          String                 // "TERM_INSURANCE", "WHOLE_LIFE", "ENDOWMENT", "MONEY_BACK", "CHILD_FOCUSED", "RETIREMENT_PENSION", "ULIP", "GROUP_INSURANCE"
+  preferredTime     String?
+  preferredLanguage String                 @default("English")
+  message           String
+  status            String                 @default("NEW") // "NEW", "CONTACTED", "CONSULTATION_SCHEDULED", "FOLLOW_UP_REQUIRED", "RESOLVED", "CLOSED"
+  internalNotes     String?
+  assignedTo        String?
+  consentGiven      Boolean                @default(true)
+  consentVersion    String                 @default("v1.0-2026")
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+
+  consultations     Consultation[]
+  statusHistory     EnquiryStatusHistory[]
+  consentRecords    ConsentRecord[]
+}
+
+model EnquiryStatusHistory {
+  id         String   @id @default(uuid())
+  enquiryId  String
+  enquiry    Enquiry  @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  fromStatus String
+  toStatus   String
+  changedBy  String
+  note       String?
+  createdAt  DateTime @default(now())
+}
+
+model Consultation {
+  id            String   @id @default(uuid())
+  enquiryId     String?
+  enquiry       Enquiry? @relation(fields: [enquiryId], references: [id], onDelete: SetNull)
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  requestedTime DateTime
+  mode          String   @default("Phone") // "Phone", "Video Call", "In-Person"
+  status        String   @default("REQUESTED") // "REQUESTED", "CONFIRMED", "COMPLETED", "CANCELLED"
+  staffNotes    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model InsuranceProduct {
+  id                String   @id @default(uuid())
+  slug              String   @unique
+  category          String
+  title             String
+  tagline           String
+  description       String
+  intendedAudience  String
+  keyFeaturesJson   String   // JSON string array of verified bullet points
+  officialSourceUrl String
+  lastVerifiedDate  DateTime
+  isPublished       Boolean  @default(true)
+  isDiscontinued    Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model ConsentRecord {
+  id             String   @id @default(uuid())
+  enquiryId      String?
+  enquiry        Enquiry? @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  ipAddress      String?
+  userAgent      String?
+  consentText    String
+  consentPurpose String
+  createdAt      DateTime @default(now())
+}
+
+model Notification {
+  id           String   @id @default(uuid())
+  recipient    String
+  channel      String   // "EMAIL", "WHATSAPP"
+  templateName String
+  subject      String?
+  body         String
+  status       String   @default("PENDING") // "PENDING", "SENT", "FAILED", "SIMULATED_DEV"
+  providerRef  String?
+  errorMessage String?
+  retryCount   Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation("UserAuditLogs", fields: [userId], references: [id], onDelete: SetNull)
+  actorName  String
+  action     String
+  entityType String
+  entityId   String
+  metadata   String?  // JSON string
+  createdAt  DateTime @default(now())
+}

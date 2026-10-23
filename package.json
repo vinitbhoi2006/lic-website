@@ -1,0 +1,31 @@
+{
+  "name": "lic-insurance-portal",
+  "version": "1.0.0",
+  "description": "Production-grade full-stack insurance advisor portal for LIC Insurance Advisory Services (Advisor: Dnyaneshwar Yedu Bhoi)",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "build": "npm run build:server && npm run build:client",
+    "build:prod": "node scripts/build-prod.js",
+    "build:server": "npm --prefix server run build",
+    "build:client": "npm --prefix client run build",
+    "prisma:generate": "npx prisma generate",
+    "prisma:push": "npx prisma db push",
+    "prisma:seed": "tsx prisma/seed.ts",
+    "test": "tsx tests/run-all-tests.ts"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.7"
+  }
+}
