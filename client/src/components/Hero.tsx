@@ -1,4 +1,4 @@
-tsx
+
 import React from 'react';
 import {
   Phone,
@@ -22,23 +22,18 @@ export const Hero: React.FC = () => {
       {/* Animated Background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.08] bg-[radial-gradient(#E8C777_1px,transparent_1px)] [background-size:28px_28px]" />
-
         <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-amber-400/15 blur-3xl animate-pulse" />
-
         <div
           className="absolute -bottom-32 -left-20 h-96 w-96 rounded-full bg-blue-400/10 blur-3xl animate-pulse"
           style={{ animationDelay: '1.5s' }}
         />
-
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300/60 to-transparent" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10 lg:py-28">
         <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-12">
-
           {/* Main Content */}
           <div className="animate-[fadeInUp_0.8s_ease-out_both] text-center lg:col-span-7 lg:text-left">
-
             <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-amber-300/25 bg-white/[0.06] px-4 py-2 text-xs font-semibold tracking-wide text-amber-200 shadow-lg shadow-black/10 backdrop-blur-md transition duration-300 hover:border-amber-300/50 hover:bg-white/10">
               <Sparkles className="h-4 w-4 text-amber-300" />
               {t.hero.authorizedAgentTag}
@@ -113,16 +108,13 @@ export const Hero: React.FC = () => {
           {/* Advisor Profile */}
           <div className="animate-[fadeInUp_1s_ease-out_0.15s_both] lg:col-span-5">
             <div className="group relative mx-auto max-w-md rounded-[2rem] border border-white/15 bg-white/[0.07] p-2 shadow-2xl shadow-black/30 backdrop-blur-xl transition duration-500 hover:-translate-y-2 hover:border-amber-300/40 hover:shadow-amber-500/10">
-
               <div className="absolute -inset-px -z-10 rounded-[2rem] bg-gradient-to-br from-amber-300/20 via-transparent to-blue-400/10 opacity-70 blur-xl transition duration-500 group-hover:opacity-100" />
 
               <div className="rounded-[1.6rem] bg-gradient-to-br from-white to-slate-100 p-6 text-slate-900 sm:p-8">
-
                 <div className="mb-7 flex items-center justify-between gap-3">
                   <span className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
                     Your Insurance Advisor
                   </span>
-
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[10px] font-bold text-emerald-800">
                     <ShieldCheck className="h-3.5 w-3.5" />
                     LIC Advisor
